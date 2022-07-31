@@ -2,28 +2,30 @@ import pickle
 
 from bitarray import bitarray
 import random
+import socket
+from crc import decodeData, encodeData
+
 
 def isFailure(probabilidad):
-   return random.random() < probabilidad
-
+    return random.random() < probabilidad
 
 
 # Capa Aplicación
 def enviarCadena(cadena):
     print("Introduzca su cadena: ", cadena)
-    return cadena 
+    return cadena
 
 # Capa de verificación
 
+
 def enviarCadenaSegura(cadena):
     a = bitarray()
-    cadena=ascii(cadena)
-    cadena=bytes(cadena,'ASCII')
+    cadena = ascii(cadena)
+    cadena = bytes(cadena, 'ASCII')
     # cadena=[cadena]
     a.frombytes(cadena)
     # use bitarray to convert the string to a bitarray
-    
-    
+
     # cadena.
     # cadena = pickle.dumps(cadena)
     # cadena = bitarray(cadena)
@@ -31,15 +33,17 @@ def enviarCadenaSegura(cadena):
     return a
 
 # Capa de ruido
+
+
 def agregarRuido(cadena):
     for n in range(len(cadena)):
         if isFailure(0.1):
             cadena[n] = not cadena[n]
     return cadena
-    
+
 
 def enviarObjeto(objeto):
-    #Seriallización va acá
+    # Seriallización va acá
     print("Enviando: ", objeto)
     return objeto
 
@@ -49,12 +53,26 @@ def encode2(string):
     prueba.frombytes(string.encode('utf-8'))
     return prueba
 
+# Prueba de funcion de socket
+
+
+def emisor_socket(data):
+    s = socket.socket()
+
+    port = 12345
+
+    s.connect(('127.0.0.1', port))
+    s.sendall(data)
+    s.close()
+    return data
+
+
 #        ____()()
 #       /      @@
 # `~~~~~\_;m__m._>o
 
-#run main()
+# run main()
 if __name__ == "__main__":
     print(enviarCadenaSegura("xddd"))
     print(agregarRuido(enviarCadenaSegura("xddd")))
-    #print(encode2('xddd'))
+    # print(encode2('xddd'))
