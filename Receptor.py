@@ -8,7 +8,7 @@ import socket
 # Prueba de receptor de socket
 
 
-def receptor_socket(data):
+def receptor_socket():
     s = socket.socket()
 
     print("Socket successfully created")
@@ -47,6 +47,7 @@ def recibirObjeto(objeto):
     return objeto
 
 
+
 # Capa de verificacion
 # J Convulcionales
 # Marco CRC-32
@@ -60,3 +61,5 @@ def recibir_Cadena_segura(objeto):
 def recibir_cadena(objeto):
     print("Enviando: ", objeto)
     return objeto
+
+receptor_socket()

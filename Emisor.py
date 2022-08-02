@@ -28,7 +28,7 @@ def enviarCadena(cadena):
 # Capa de verificación
 
 
-def enviarCadenaSegura(cadena, tipo_verificador = 'fletcher16'):
+def enviarCadenaSegura(cadena, tipo_verificador = 'cadena = pickle.dumps(cadena)'):
     a = bitarray()
     cadena = ascii(cadena)
     cadena = bytes(cadena, 'ASCII')
