@@ -6,6 +6,16 @@ import socket
 from crc import decodeData, encodeData
 
 
+# Para la verificación de Ida
+def fletcher16(data):
+    sum1 = 0
+    sum2 = 0
+    for i in range(len(data)):
+        sum1 = (sum1 + data[i]) % 255
+        sum2 = (sum2 + sum1) % 255
+    return (sum2 << 8) + sum1
+
+
 def isFailure(probabilidad):
     return random.random() < probabilidad
 
@@ -18,19 +28,21 @@ def enviarCadena(cadena):
 # Capa de verificación
 
 
-def enviarCadenaSegura(cadena):
+def enviarCadenaSegura(cadena, tipo_verificador = 'fletcher16'):
     a = bitarray()
     cadena = ascii(cadena)
     cadena = bytes(cadena, 'ASCII')
     # cadena=[cadena]
-    a.frombytes(cadena)
     # use bitarray to convert the string to a bitarray
-
     # cadena.
     # cadena = pickle.dumps(cadena)
     # cadena = bitarray(cadena)
     #print("Enviando: ", cadena)
-    return a
+    a.frombytes(cadena)
+    if tipo_verificador == 'fletcher16':
+        verificador= fletcher16(a)
+
+    return a, verificador, tipo_verificador
 
 # Capa de ruido
 
@@ -67,12 +79,16 @@ def emisor_socket(data):
     return data
 
 
-#        ____()()
-#       /      @@
-# `~~~~~\_;m__m._>o
 
-# run main()
 if __name__ == "__main__":
-    print(enviarCadenaSegura("xddd"))
-    print(agregarRuido(enviarCadenaSegura("xddd")))
+    mensaje_a_enviar = input("Introduzca su mensaje a enviar: \n")
+    metodo_verificador = input("Introduzca el metodo de verificación \n")
+
+    bit_data, verificador, tipo_verificador = enviarCadenaSegura(mensaje_a_enviar, metodo_verificador)
+    bit_data = agregarRuido(bit_data)
+
+    #envio de datos
+
+    datos_serializados = pickle.dumps({'cadena': bit_data, 'verificador': verificador, 'tipo_verificador': tipo_verificador})
+    emisor_socket(datos_serializados)
     # print(encode2('xddd'))
