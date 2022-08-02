@@ -43,8 +43,7 @@ def encodeData(data, key):
     appended_data = data + '0'*(l_key-1)
     remainder = mod2div(appended_data, key)
 
-    codeword = data + remainder
-    return codeword
+    return remainder
 
 
 def decodeData(data, key):

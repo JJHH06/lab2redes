@@ -1,7 +1,9 @@
 # read a qr based on an image in path
 # return the text
 
-from crc import decodeData, encodeData
+from crc import decodeData, encodeData, validate_remainder
+import codecs
+import pickle
 
 import socket
 
@@ -26,8 +28,16 @@ def receptor_socket():
         print('Got connection from', addr)
 
         data = c.recv(1024)
+        # data = codecs.encode(pickle.dumps(data), "hex").decode()
+        data = pickle.loads(data)
 
-        print(data)
+        if data['tipo_verificador'] == 'CRC':
+            ans = list(data['cadena'])
+            ans = ''.join(str(e) for e in ans)
+            de = decodeData(str(ans), data['verificador'])
+            validate_remainder(de)
+
+        # print(data['tipo_verificador'])
 
         # if not data:
         #     break
@@ -47,7 +57,6 @@ def recibirObjeto(objeto):
     return objeto
 
 
-
 # Capa de verificacion
 # J Convulcionales
 # Marco CRC-32
@@ -61,5 +70,6 @@ def recibir_Cadena_segura(objeto):
 def recibir_cadena(objeto):
     print("Enviando: ", objeto)
     return objeto
+
 
 receptor_socket()
