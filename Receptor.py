@@ -67,28 +67,17 @@ def receptor_socket():
 
 
         if data['tipo_verificador'] == 'hamming':
-            correction = detectError(data['cadena'], data['verificador'])
+            datos_copia = list(data['cadena']).copy()
+            correction = detectError(''.join(datos_copia), data['verificador'])
             if correction == 0:
                 print("Mensaje correcto segun hamming")
             else:
                 print("Mensaje incorrecto segun hamming")
-                errorFound =len(data['cadena'])-correction
+                errorFound =len(datos_copia)-correction
                 print("Se detecto un error en la posicion: ", errorFound)
-                corrected_data = data['cadena'].copy()
-                # corrected_data[errorFound] = not corrected_data[errorFound]
 
-                for i in range(len(data['cadena'])):
-                    corrected_string = ''
-                    if i == errorFound:
-                        if data['cadena'][i] == 0:
-                            corrected_string.append('1')
-                        else:
-                            corrected_string.append('0')
-                    else:
-                        corrected_string.append(data['cadena'][i])
-
-    
-                print("Los datos corregidos son", corrected_string)
+                datos_copia[errorFound] = '1' if datos_copia[errorFound] == '0' else '0'
+                print("Los datos corregidos son", ''.join(datos_copia))
                 
 
 
@@ -108,24 +97,7 @@ def receptor_socket():
 # Recibe el mensaje mediante un socket
 
 
-def recibirObjeto(objeto):
-    print("Enviando: ", objeto)
-    return objeto
 
-
-# Capa de verificacion
-# J Hamming Code
-# Marco CRC-32
-# Christian Fletcher checksum
-# Recibe el mensaje de bitarray y lo pasa por los algoritmos de correcion de errores.
-def recibir_Cadena_segura(objeto):
-    print("Enviando: ", objeto)
-    return objeto
-
-
-def recibir_cadena(objeto):
-    print("Enviando: ", objeto)
-    return objeto
 
 
 receptor_socket()

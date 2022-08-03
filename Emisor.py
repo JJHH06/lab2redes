@@ -70,11 +70,13 @@ def agregarRuido(cadena, tasa_fallo=0.01, tipo='fletcher16'):
         for n in range(len(cadena)):
             if isFailure(tasa_fallo):
                 if cadena[n] == '0':
-                    cadena[n] = '1'
-                    new_list.append(cadena[n])
+                    new_list.append('1')
                 else:
-                    cadena[n] = '0'
-                    new_list.append(cadena[n])
+                    
+                    new_list.append('0')
+            else:
+                new_list.append(cadena[n])
+        return ''.join(new_list)
     else:
         for n in range(len(cadena)):
             if isFailure(tasa_fallo):
@@ -83,10 +85,7 @@ def agregarRuido(cadena, tasa_fallo=0.01, tipo='fletcher16'):
     return cadena
 
 
-def enviarObjeto(objeto):
-    # Seriallización va acá
-    print("Enviando: ", objeto)
-    return objeto
+
 
 
 def encode2(string):
@@ -96,7 +95,7 @@ def encode2(string):
 
 # Prueba de funcion de socket
 
-
+#Capa de envio
 def emisor_socket(data):
     s = socket.socket()
 
