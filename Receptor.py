@@ -35,7 +35,8 @@ def receptor_socket():
         if data['tipo_verificador'] == 'CRC':
             ans = list(data['cadena'])
             ans = ''.join(str(e) for e in ans)
-            de = decodeData(str(ans), data['verificador'])
+            key = '1001'
+            de = decodeData(str(ans), key)
             validate_remainder(de)
 
         # print(data['tipo_verificador'])
@@ -71,12 +72,6 @@ def recibir_Cadena_segura(objeto):
 def recibir_cadena(objeto):
     print("Enviando: ", objeto)
     return objeto
-
-
-
-
-
-
 
 
 receptor_socket()
