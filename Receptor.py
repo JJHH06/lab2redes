@@ -30,6 +30,7 @@ def receptor_socket():
         data = c.recv(1024)
         # data = codecs.encode(pickle.dumps(data), "hex").decode()
         data = pickle.loads(data)
+        print("Recibido: ", data)
 
         if data['tipo_verificador'] == 'CRC':
             ans = list(data['cadena'])
@@ -58,7 +59,7 @@ def recibirObjeto(objeto):
 
 
 # Capa de verificacion
-# J Convulcionales
+# J Hamming Code
 # Marco CRC-32
 # Christian Fletcher checksum
 # Recibe el mensaje de bitarray y lo pasa por los algoritmos de correcion de errores.
@@ -70,6 +71,12 @@ def recibir_Cadena_segura(objeto):
 def recibir_cadena(objeto):
     print("Enviando: ", objeto)
     return objeto
+
+
+
+
+
+
 
 
 receptor_socket()

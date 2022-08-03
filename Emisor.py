@@ -4,6 +4,7 @@ from bitarray import bitarray
 import random
 import socket
 from crc import decodeData, encodeData
+from HammingCode import *
 
 
 # Para la verificación de Ida
@@ -28,7 +29,7 @@ def enviarCadena(cadena):
 # Capa de verificación
 
 
-def enviarCadenaSegura(cadena, tipo_verificador='cadena = pickle.dumps(cadena)'):
+def enviarCadenaSegura(cadena, tipo_verificador='fletcher16'):
     a = bitarray()
     cadena = ascii(cadena)
     cadena = bytes(cadena, 'ASCII')
@@ -43,16 +44,34 @@ def enviarCadenaSegura(cadena, tipo_verificador='cadena = pickle.dumps(cadena)')
         ans = encodeData(lisData, verificador)
         b.extend(ans)
         a = a+b
+    else:
+        a = ''.join([str(n) for n in a])
+        tipo_verificador = 'hamming'
+        m = len(a)
+        r = calcRedundantBits(m)
+        arr = posRedundantBits(a, r)
+        arr = calcParityBits(arr, r)
+        a = arr
+        verificador = r
 
     return a, verificador, tipo_verificador
 
 # Capa de ruido
 
 
-def agregarRuido(cadena):
-    for n in range(len(cadena)):
-        if isFailure(0.1):
-            cadena[n] = not cadena[n]
+def agregarRuido(cadena, tasa_fallo = 0.01, tipo = 'fletcher16'):
+
+    if tipo == 'hamming':
+        for n in range(len(cadena)):
+            if isFailure(tasa_fallo):
+                if cadena[n] == '0':
+                    cadena[n] = '1'
+                else:
+                    cadena[n] = '0'
+    else:
+        for n in range(len(cadena)):
+            if isFailure(tasa_fallo):
+                cadena[n] = not cadena[n]
     return cadena
 
 
@@ -87,7 +106,7 @@ if __name__ == "__main__":
 
     bit_data, verificador, tipo_verificador = enviarCadenaSegura(
         mensaje_a_enviar, metodo_verificador)
-    bit_data = agregarRuido(bit_data)
+    bit_data = agregarRuido(bit_data, 0.01, tipo_verificador)
 
     # envio de datos
 
