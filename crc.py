@@ -2,6 +2,10 @@
 
 import socket
 
+def append_to_file(string, file_name):
+    with open(file_name, 'a') as file:
+        file.write(string)
+        file.write('\n')
 
 def xor(a, b):
     result = []
@@ -59,8 +63,10 @@ def decodeData(data, key):
 def validate_remainder(remainder):
     if remainder == '000':
         print('Segun CRC-32 la cadena bitarray NO presenta error alguno\n')
+        append_to_file('BUENO', 'CRCaccuracy.txt')
     else:
         print('Segun CRC-32 la cadena bitarray SI presenta error alguno\n')
+        append_to_file('malo', 'CRCaccuracy.txt')
 # Emisor
 
 

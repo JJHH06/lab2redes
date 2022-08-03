@@ -1,11 +1,19 @@
 import pickle
-
+import time
 from bitarray import bitarray
 import random
 import socket
 from crc import decodeData, encodeData
 from HammingCode import *
 
+def append_to_file(string, file_name):
+    with open(file_name, 'a') as file:
+        file.write(string)
+        file.write('\n')
+
+#generate a random string of length n
+def random_string(n):
+    return ''.join(random.choice('abcdefghijklmnopqrstuvwxyz') for i in range(n))
 
 # Para la verificación de Ida
 def fletcher16(data):
@@ -116,8 +124,42 @@ if __name__ == "__main__":
     bit_data = agregarRuido(bit_data, 0.5, tipo_verificador)
 
     # envio de datoshammin
-
     datos_serializados = pickle.dumps(
         {'cadena': bit_data, 'verificador': verificador, 'tipo_verificador': tipo_verificador})
-    emisor_socket(datos_serializados)
-    # print(encode2('xddd'))
+
+    # para las graficas de Hamming
+    # for i in range(10):
+        # mensaje_a_enviar = random_string(10)
+        # metodo_verificador = 'hamming'
+        # bit_data, verificador, tipo_verificador = enviarCadenaSegura(
+        # mensaje_a_enviar, metodo_verificador)
+        # bit_data = agregarRuido(bit_data, 0.05, tipo_verificador)
+        # datos_serializados = pickle.dumps(
+        # {'cadena': bit_data, 'verificador': verificador, 'tipo_verificador': tipo_verificador})
+        # append_to_file(bit_data, "original.txt")
+        # emisor_socket(datos_serializados)
+
+    # for i in range(100):
+    #     mensaje_a_enviar = random_string(10)
+    #     metodo_verificador = 'fletcher16'
+    #     bit_data, verificador, tipo_verificador = enviarCadenaSegura(
+    #     mensaje_a_enviar, metodo_verificador)
+    #     bit_data = agregarRuido(bit_data, 0.05, tipo_verificador)
+    #     datos_serializados = pickle.dumps(
+    #     {'cadena': bit_data, 'verificador': verificador, 'tipo_verificador': tipo_verificador})
+    #     append_to_file(''.join([str(n) for n in bit_data]), "originalfletcher.txt")
+    #     emisor_socket(datos_serializados)
+    #     time.sleep(0.2)
+    
+
+    # for i in range(100):
+    #     mensaje_a_enviar = random_string(10)
+    #     metodo_verificador = 'CRC'
+    #     bit_data, verificador, tipo_verificador = enviarCadenaSegura(
+    #     mensaje_a_enviar, metodo_verificador)
+    #     bit_data = agregarRuido(bit_data, 0.05, tipo_verificador)
+    #     datos_serializados = pickle.dumps(
+    #     {'cadena': bit_data, 'verificador': verificador, 'tipo_verificador': tipo_verificador})
+    #     append_to_file(''.join([str(n) for n in bit_data]), "originalCRC.txt")
+    #     emisor_socket(datos_serializados)
+    #     time.sleep(0.2)

@@ -9,6 +9,10 @@ from HammingCode import detectError
 import socket
 
 # Prueba de receptor de socket
+def append_to_file(string, file_name):
+    with open(file_name, 'a') as file:
+        file.write(string)
+        file.write('\n')
 
 def fletcher16(data):
     sum1 = 0
@@ -53,16 +57,24 @@ def receptor_socket():
             de = decodeData(str(ans), key)
             print(de)
             validate_remainder(de)
+            append_to_file(''.join([str(n) for n in data['cadena']]), 'CRC.txt')
+
 
         if data['tipo_verificador'] == 'fletcher16':
             if fletcher16(data['cadena']) == data['verificador']:
                 print("Mensaje correcto segun fletcher16")
+                append_to_file('correcto', 'fletcherAccuracy.txt')
             else:
                 print("Mensaje incorrecto segun fletcher16")
+                append_to_file('malo', 'fletcherAccuracy.txt')
+
             try:
                 print(bitarray_to_string(data['cadena']))
             except:
                 print('No se puede decodificar')
+
+            append_to_file(''.join([str(n) for n in data['cadena']]), 'fletcher.txt')
+            
             
 
 
@@ -78,9 +90,10 @@ def receptor_socket():
 
                 datos_copia[errorFound] = '1' if datos_copia[errorFound] == '0' else '0'
                 print("Los datos corregidos son", ''.join(datos_copia))
+                append_to_file(''.join(datos_copia), 'correction.txt')
                 
 
-
+        
 
         # print(data['tipo_verificador'])
 
