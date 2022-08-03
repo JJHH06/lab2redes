@@ -38,7 +38,7 @@ def enviarCadenaSegura(cadena, tipo_verificador='fletcher16'):
 
     if 'CRC' in tipo_verificador:
         b = bitarray()
-        # CRC-32 
+        # CRC-32
         # Polynomial x32 + x26 + x23 + x22 + x16 + x12 + x11 + x10 + x8 + x7 + x5 + x4 + x2 + x + 1
         # Hex 0x 04 C1 1D B7
         key = '0100110000010001110110110111'
@@ -64,19 +64,22 @@ def enviarCadenaSegura(cadena, tipo_verificador='fletcher16'):
 # Capa de ruido
 
 
-def agregarRuido(cadena, tasa_fallo = 0.01 , tipo = 'fletcher16'):
-
+def agregarRuido(cadena, tasa_fallo=0.01, tipo='fletcher16'):
+    new_list = []
     if tipo == 'hamming':
         for n in range(len(cadena)):
             if isFailure(tasa_fallo):
                 if cadena[n] == '0':
                     cadena[n] = '1'
+                    new_list.append(cadena[n])
                 else:
                     cadena[n] = '0'
+                    new_list.append(cadena[n])
     else:
         for n in range(len(cadena)):
             if isFailure(tasa_fallo):
                 cadena[n] = not cadena[n]
+    new_list_str = ''.join(new_list)
     return cadena
 
 
