@@ -38,8 +38,11 @@ def enviarCadenaSegura(cadena, tipo_verificador='fletcher16'):
 
     if 'CRC' in tipo_verificador:
         b = bitarray()
-        key = '1001'
-        lisData = ''.join(str(e) for e in list(cadena))
+        # CRC-32 
+        # Polynomial x32 + x26 + x23 + x22 + x16 + x12 + x11 + x10 + x8 + x7 + x5 + x4 + x2 + x + 1
+        # Hex 0x 04 C1 1D B7
+        key = '0100110000010001110110110111'
+        lisData = ''.join(str(e) for e in list(a))
         ans = encodeData(lisData, key)
         b.extend(ans)
         a = a.copy()+b
@@ -110,7 +113,7 @@ if __name__ == "__main__":
         mensaje_a_enviar, metodo_verificador)
     bit_data = agregarRuido(bit_data, 0.5, tipo_verificador)
 
-    # envio de datos
+    # envio de datoshammin
 
     datos_serializados = pickle.dumps(
         {'cadena': bit_data, 'verificador': verificador, 'tipo_verificador': tipo_verificador})

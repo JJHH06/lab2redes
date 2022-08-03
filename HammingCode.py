@@ -1,4 +1,4 @@
-# Modulo de python en donde el Hamming Code
+# Modulo de python en donde el Hamming Code se utiliza para la corrección de errores
 # Implementación de Geeks4Geeks tomada de: https://www.geeksforgeeks.org/hamming-code-implementation-in-python/
  
  

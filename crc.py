@@ -1,3 +1,4 @@
+# Implementacion tomada de https://es.acervolima.com/verificacion-de-redundancia-ciclica-en-python/
 
 import socket
 
@@ -18,7 +19,6 @@ def mod2div(divident, divisor):
     while pick < len(divident):
 
         if tmp[0] == '1':
-
             tmp = xor(divisor, tmp) + divident[pick]
 
         else:
