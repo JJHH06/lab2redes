@@ -34,18 +34,19 @@ def enviarCadenaSegura(cadena, tipo_verificador='fletcher16'):
     cadena = ascii(cadena)
     cadena = bytes(cadena, 'ASCII')
     a.frombytes(cadena)
+    print(tipo_verificador)
 
-    if tipo_verificador == 'fletcher16':
-        verificador = fletcher16(a)
-    if tipo_verificador == 'CRC':
+    if 'CRC' in tipo_verificador:
         b = bitarray()
         key = '1001'
         lisData = ''.join(str(e) for e in list(cadena))
         ans = encodeData(lisData, key)
         b.extend(ans)
-        a = a+b
+        a = a.copy()+b
         verificador = ans
-    else:
+    if 'fletcher16' in tipo_verificador:
+        verificador = fletcher16(a)
+    if 'hamming' in tipo_verificador:
         a = ''.join([str(n) for n in a])
         tipo_verificador = 'hamming'
         m = len(a)
@@ -60,7 +61,7 @@ def enviarCadenaSegura(cadena, tipo_verificador='fletcher16'):
 # Capa de ruido
 
 
-def agregarRuido(cadena, tasa_fallo = 0.01, tipo = 'fletcher16'):
+def agregarRuido(cadena, tasa_fallo = 0.01 , tipo = 'fletcher16'):
 
     if tipo == 'hamming':
         for n in range(len(cadena)):
@@ -107,7 +108,7 @@ if __name__ == "__main__":
 
     bit_data, verificador, tipo_verificador = enviarCadenaSegura(
         mensaje_a_enviar, metodo_verificador)
-    bit_data = agregarRuido(bit_data, 0.01, tipo_verificador)
+    bit_data = agregarRuido(bit_data, 0.5, tipo_verificador)
 
     # envio de datos
 
