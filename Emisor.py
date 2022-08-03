@@ -39,11 +39,12 @@ def enviarCadenaSegura(cadena, tipo_verificador='fletcher16'):
         verificador = fletcher16(a)
     if tipo_verificador == 'CRC':
         b = bitarray()
-        verificador = '1001'
+        key = '1001'
         lisData = ''.join(str(e) for e in list(cadena))
-        ans = encodeData(lisData, verificador)
+        ans = encodeData(lisData, key)
         b.extend(ans)
         a = a+b
+        verificador = ans
     else:
         a = ''.join([str(n) for n in a])
         tipo_verificador = 'hamming'
